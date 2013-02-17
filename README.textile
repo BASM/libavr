@@ -1,0 +1,13 @@
+h1. avr_libuart
+
+Library for Library to simplify working with avr-uart.
+
+Support:
+* ATMEGA328P
+* ATTINY85
+
+Using:
+* Environment variable:
+** DEVICE -- AVR device, "attiny45" for example
+** FREQ   -- Frequency "12000000UL" for example
+
