@@ -4,7 +4,7 @@ Library for Library to simplify working with avr-uart.
 
 Support:
 * ATMEGA328P
-* ATTINY85
+* -ATTINY85-
 
 Using:
 * Environment variable:
