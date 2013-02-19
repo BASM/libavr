@@ -1,0 +1,4 @@
+* SPLIT UART: (saving 58 bytes in RAM and 20 bytes in ROM)
+** first part -- uart working -- init and other
+** second part -- stdout using
+
