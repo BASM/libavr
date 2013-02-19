@@ -1,10 +1,14 @@
-h1. avr_libuart
+h1. libavr.
 
-Library for Library to simplify working with avr-uart.
+Library for support AVR microcontrollers.
 
 Support:
 * ATMEGA328P
 * -ATTINY85-
+
+Libaries:
+* uart -- work this UART device, also can connect 'stdout' to uart.
+* twi  -- libarry for simple work with twi device on master mode.
 
 Using:
 * Environment variable:

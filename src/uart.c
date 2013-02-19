@@ -26,7 +26,9 @@
 #include <avr/io.h>
 #include <avr/wdt.h>
 
-void uart_bchar(char c){
+#include <uart.h>
+
+static void uart_bchar(char c){
       while ( !( UCSR0A & (1<<UDRE0)) );
       UDR0 = c;
 }
@@ -40,7 +42,7 @@ static int bchar_put(char ch, FILE* file)
 static FILE uart_stdout=FDEV_SETUP_STREAM(bchar_put, NULL, _FDEV_SETUP_WRITE);
 
 
-int uart_init(){
+int uart_init(void){
 #ifndef F_CPU
 #error Please set F_CPU!
 #endif
@@ -57,10 +59,12 @@ int uart_init(){
 #else
     UCSR0A &= ~(1 << U2X0);
 #endif
+    return 0;
 }
 
-int uart_stdio(){
+int uart_stdio(void){
     stdout=&uart_stdout;
     stderr=&uart_stdout;
   //FIXME add stdio
+    return 0;
 }
