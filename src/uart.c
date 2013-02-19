@@ -22,12 +22,14 @@
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
-#include <stdio.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
 
 #include <uart.h>
 
+#define UART_STDOUT
+#ifdef UART_STDOUT
+#include <stdio.h>
 static void uart_bchar(char c){
       while ( !( UCSR0A & (1<<UDRE0)) );
       UDR0 = c;
@@ -41,6 +43,13 @@ static int bchar_put(char ch, FILE* file)
 
 static FILE uart_stdout=FDEV_SETUP_STREAM(bchar_put, NULL, _FDEV_SETUP_WRITE);
 
+int uart_stdio(void){
+    stdout=&uart_stdout;
+    stderr=&uart_stdout;
+  //FIXME add stdio
+    return 0;
+}//*/
+#endif /* UART_STDOUT */
 
 int uart_init(void){
 #ifndef F_CPU
@@ -59,12 +68,5 @@ int uart_init(void){
 #else
     UCSR0A &= ~(1 << U2X0);
 #endif
-    return 0;
-}
-
-int uart_stdio(void){
-    stdout=&uart_stdout;
-    stderr=&uart_stdout;
-  //FIXME add stdio
     return 0;
 }
