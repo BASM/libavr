@@ -2,7 +2,6 @@
 
 #include <avr/power.h>
 
-#include <util/delay.h>
 #include <util/twi.h>
 
 #include <twi.h>
@@ -49,7 +48,6 @@ int twi_req_write(uint8_t dev, uint8_t addr)
   if(twi_p_sla(dev, TW_WRITE)) return 2;
   if(twi_p_write(addr)) return 3;
   twi_p_stop();
-  _delay_us(100);
   
   if(twi_p_start()) return 4;
   if(twi_p_sla(dev, TW_WRITE)) return 5;
@@ -92,7 +90,6 @@ static int twi_wait_int(void)
         TWCR=0; //RESET
       return 1;
     }
-    _delay_us(1);
   }
   return 0;
 }
