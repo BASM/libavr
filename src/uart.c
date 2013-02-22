@@ -37,6 +37,8 @@ static void uart_bchar(char c){
 
 static int bchar_put(char ch, FILE* file)
 {
+  if(ch == '\n')
+    uart_bchar('\r');
   uart_bchar(ch);
   return 0;
 }
