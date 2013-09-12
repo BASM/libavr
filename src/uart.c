@@ -43,11 +43,40 @@ static int bchar_put(char ch, FILE* file)
   return 0;
 }
 
-static FILE uart_stdout=FDEV_SETUP_STREAM(bchar_put, NULL, _FDEV_SETUP_WRITE);
+static int bchar_get_nonblock(FILE* file) {
+  if ( (UCSR0A & (1<<RXC0)) )
+    return UDR0;
+  else
+    return -1;
+}
+
+int getch(void) {
+  int res;
+  while((res=getchar())==-1){};
+  return res;
+}
+
+int trych(void) {
+  return getchar();
+}
+
+static FILE fd_uart_stdio=FDEV_SETUP_STREAM(bchar_put, bchar_get_nonblock, _FDEV_SETUP_RW);
+
+void uart_stdin(void) {
+    stdin=&fd_uart_stdio;
+}
+void uart_stdout(void) {
+    stdout=&fd_uart_stdio;
+}
+void uart_stderr(void) {
+    stderr=&fd_uart_stdio;
+}
+
 
 int uart_stdio(void){
-    stdout=&uart_stdout;
-    stderr=&uart_stdout;
+  uart_stdout();
+  uart_stderr();
+  uart_stdin();
   //FIXME add stdio
     return 0;
 }//*/
@@ -59,11 +88,12 @@ int uart_init(void){
 #endif
   UCSR0A = 0;
   UCSR0B = 0x18;
+  UCSR0B |= RXEN0;
   UCSR0C = 0x06;
 
 
-//#define BAUD 9600
-#define BAUD 38400
+#define BAUD 9600
+//#define BAUD 38400
 //#define BAUD 115200
 #include <util/setbaud.h>
     UBRR0H = UBRRH_VALUE;
