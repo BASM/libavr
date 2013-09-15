@@ -5,29 +5,33 @@
 //
 int uart_init(void);
 
+int getbyte_nonblock(void);
+int bchar_put(char ch);
+
 /**
  * Switch on printf and frends.
  *
  */
-int uart_stdio(void);
+int stdioconf_stdio(void);
 
 /** Switch on only stdin
  */
-void uart_stdin(void);
+void stdioconf_stdin(void);
 
 /** Switch on only stdout
  */
-void uart_stdout(void);
+void stdioconf_stdout(void);
 
 /** Switch on only stderr
  */
-void uart_stderr(void);
+void stdioconf_stderr(void);
 
 /** Block and wait char from UART.
  *
  */
 int getch(void);
 
+int getbyte(void);
 /** Wait char from UART don't block.
  */
 int trych(void);

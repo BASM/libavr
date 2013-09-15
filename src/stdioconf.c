@@ -1,5 +1,5 @@
 /*
- * uart.c  - uart utils
+ * stdio.c  - libc stdio connector
  * Creation Date: 2012-05-20
  *
  * Copyright (C) 2012 Leonid Myravjev (asm@asm.pp.ru)
@@ -30,53 +30,42 @@
 #define UART_STDOUT
 #ifdef UART_STDOUT
 #include <stdio.h>
-static void uart_bchar(char c){
-      while ( !( UCSR0A & (1<<UDRE0)) );
-      UDR0 = c;
+
+static int uart_get_nonblock(FILE* file) {
+  return getbyte_nonblock();
+}
+static int uart_put(char ch,FILE *file) {
+  return bchar_put(ch);
 }
 
-int bchar_put(char ch)
-{
-  if(ch == '\n')
-    uart_bchar('\r');
-  uart_bchar(ch);
-  return 0;
+static FILE fd_uart_stdio=FDEV_SETUP_STREAM(uart_put, uart_get_nonblock, _FDEV_SETUP_RW);
+
+void stdioconf_stdin(void) {
+    stdin=&fd_uart_stdio;
+}
+void stdioconf_stdout(void) {
+    stdout=&fd_uart_stdio;
+}
+void stdioconf_stderr(void) {
+    stderr=&fd_uart_stdio;
 }
 
-int getbyte_nonblock(void) {
-  if ( (UCSR0A & (1<<RXC0)) )
-    return UDR0;
-  else
-    return -1;
+int getch(void) {
+  int res;
+  while((res=getchar())==-1){};
+  return res;
 }
 
-int getbyte(void) {
-  while ( (UCSR0A & (1<<RXC0)) ==0 );
-  return UDR0;
+int trych(void) {
+  return getchar();
 }
 
-#endif /* UART_STDOUT */
 
-int uart_init(void){
-#ifndef F_CPU
-#error Please set F_CPU!
-#endif
-  UCSR0A = 0;
-  UCSR0B = 0x18;
-  UCSR0B |= RXEN0;
-  UCSR0C = 0x06;
-
-
-//#define BAUD 9600
-//#define BAUD 38400
-#define BAUD 115200
-#include <util/setbaud.h>
-    UBRR0H = UBRRH_VALUE;
-    UBRR0L = UBRRL_VALUE;
-#if USE_2X
-    UCSR0A |= (1 << U2X0);
-#else
-    UCSR0A &= ~(1 << U2X0);
-#endif
+int stdioconf_stdio(void){
+  stdioconf_stdout();
+  stdioconf_stderr();
+  stdioconf_stdin();
+  //FIXME add stdio
     return 0;
-}
+}//*/
+#endif /* UART_STDOUT */
