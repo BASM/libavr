@@ -15,6 +15,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=$ENV{DEVICE} -DF_CPU=$ENV{FREQ} -Os -W
 add_library(stdioconf STATIC src/stdioconf.c)
 add_library(uart STATIC src/uart.c)
 add_library(twi STATIC src/twi.c)
+add_library(adc STATIC src/adc.c)
 
 #add_executable(main test/main.c)
 #target_link_libraries(main uart twi)
