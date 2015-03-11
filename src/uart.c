@@ -68,8 +68,8 @@ int uart_init(void){
 
 
 //#define BAUD 9600
-//#define BAUD 38400
-#define BAUD 115200
+#define BAUD 38400
+//#define BAUD 115200
 #include <util/setbaud.h>
     UBRR0H = UBRRH_VALUE;
     UBRR0L = UBRRL_VALUE;
